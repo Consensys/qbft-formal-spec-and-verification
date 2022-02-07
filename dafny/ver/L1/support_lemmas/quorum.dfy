@@ -6,16 +6,16 @@ include "../../common/sets.dfy"
 include "../distr_system_spec/distributed_system.dfy"
 include "axioms.dfy"
 
-module EEALemmaQuorum
+module L1_LemmaQuorum
 {
 
-    import opened EEASpecTypes
-    import opened EEASpecNetwork
-    import opened EEADistributedSystem
-    import opened EEAAuxiliaryFunctionsAndLemmas
-    import opened EEASpec
+    import opened L1_SpecTypes
+    import opened L1_SpecNetwork
+    import opened L1_DistributedSystem
+    import opened L1_AuxiliaryFunctionsAndLemmas
+    import opened L1_Spec
     import opened HelperLemmasSets
-    import opened EEAAxioms
+    import opened L1_Axioms
 
     lemma lemmaQuorumIntersection<T(==)>(nodes:set<T>, byz:set<T>, Q1:set<T>, Q2:set<T>)
     requires nodes != {}

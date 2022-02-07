@@ -1,8 +1,8 @@
 include "../../../spec/L1//types.dfy"
 
-module EEASpecNetwork
+module L1_SpecNetwork
 {
-    import opened EEASpecTypes
+    import opened L1_SpecTypes
 
     datatype Network = Network(
         nodes: seq<Address>,

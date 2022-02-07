@@ -10,18 +10,18 @@ include "axioms.dfy"
 include "../theorems_defs.dfy"
 
 
-module EEAAuxFunctionsProof
+module L1_AuxFunctionsProof
 {
-    import opened EEASpecTypes
-    import opened EEASpecNetwork
-    import opened EEAAuxiliaryFunctionsAndLemmas
-    import opened EEACommonFunctions
-    import opened EEASpec
+    import opened L1_SpecTypes
+    import opened L1_SpecNetwork
+    import opened L1_AuxiliaryFunctionsAndLemmas
+    import opened L1_CommonFunctions
+    import opened L1_Spec
     import opened HelperLemmasSets
-    import opened EEADistributedSystem
-    import opened EEAInstrumentedSpecs  
-    import opened EEAAxioms
-    import opened EEATheoremsDefs
+    import opened L1_DistributedSystem
+    import opened L1_InstrumentedSpecs  
+    import opened L1_Axioms
+    import opened L1_TheoremsDefs
 
 
     predicate adversaryTakesStep(

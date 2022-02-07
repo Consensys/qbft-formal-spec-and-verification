@@ -3,12 +3,12 @@ include "common_functions.dfy"
 include "network.dfy"
 include "../../../spec/L1/node_auxiliary_functions.dfy"
 
-module EEAAdversary
+module L1_Adversary
 {
-    import opened EEASpecTypes
-    import opened EEASpecNetwork
-    import opened EEAAuxiliaryFunctionsAndLemmas
-    import opened EEACommonFunctions
+    import opened L1_SpecTypes
+    import opened L1_SpecNetwork
+    import opened L1_AuxiliaryFunctionsAndLemmas
+    import opened L1_CommonFunctions
         
     datatype Adversary = Adversary (
         messagesReceived: set<QbftMessage>,

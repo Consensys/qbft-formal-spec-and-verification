@@ -2,9 +2,9 @@ include "../../../spec/L1/types.dfy"
 include "../../../spec/L1/node_auxiliary_functions.dfy"
 
 
-module EEACommonFunctions{
-    import opened EEASpecTypes
-    import opened EEAAuxiliaryFunctionsAndLemmas
+module L1_CommonFunctions{
+    import opened L1_SpecTypes
+    import opened L1_AuxiliaryFunctionsAndLemmas
 
     /**
      * @returns The union of all sets included in `sets`.

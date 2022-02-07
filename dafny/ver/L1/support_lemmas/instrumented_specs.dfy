@@ -6,15 +6,15 @@ include "../../../spec/L1/node.dfy"
 include "../distr_system_spec/distributed_system.dfy"
 include "../../common/sets.dfy"
 
-module EEAInstrumentedSpecs
+module L1_InstrumentedSpecs
 {
-    import opened EEASpecTypes
-    import opened EEASpecNetwork
-    import opened EEAAuxiliaryFunctionsAndLemmas
-    import opened EEASpec
+    import opened L1_SpecTypes
+    import opened L1_SpecNetwork
+    import opened L1_AuxiliaryFunctionsAndLemmas
+    import opened L1_Spec
     import opened HelperLemmasSets
-    import opened EEADistributedSystem
-    import opened EEAAdversary
+    import opened L1_DistributedSystem
+    import opened L1_Adversary
 
     datatype InstrNodeState = InstrNodeState(
         nodeState: NodeState,

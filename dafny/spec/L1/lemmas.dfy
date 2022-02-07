@@ -13,10 +13,10 @@
 include "types.dfy"
 include "node_auxiliary_functions.dfy"
 
-module EEALemmas
+module L1_Lemmas
 {
-    import opened EEASpecTypes
-    import opened EEAAuxiliaryFunctionsAndLemmas
+    import opened L1_SpecTypes
+    import opened L1_AuxiliaryFunctionsAndLemmas
 
     lemma lemmaIfMappedSubSetOfGreaterSizeExistsThenMappedSmallSubsetExistsHelper1<T,T2>(s:set<T>, s2: set<T2>, f:T -> T2)
     requires s2 == set m | m in s :: f(m)

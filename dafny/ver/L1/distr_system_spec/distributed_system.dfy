@@ -5,14 +5,14 @@ include "network.dfy"
 include "../../../spec/L1/node_auxiliary_functions.dfy"
 include "../../../spec/L1/node.dfy"
 
-module EEADistributedSystem
+module L1_DistributedSystem
 {
-    import opened EEASpecTypes
-    import opened EEASpecNetwork
-    import opened EEAAuxiliaryFunctionsAndLemmas
-    import opened EEASpec
-    import opened EEAAdversary
-    import opened EEACommonFunctions
+    import opened L1_SpecTypes
+    import opened L1_SpecNetwork
+    import opened L1_AuxiliaryFunctionsAndLemmas
+    import opened L1_Spec
+    import opened L1_Adversary
+    import opened L1_CommonFunctions
 
     datatype DSState = DSState(
         configuration: Configuration,

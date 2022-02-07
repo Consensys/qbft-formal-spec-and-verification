@@ -3,9 +3,9 @@ include "../distr_system_spec/distributed_system.dfy"
 include "instrumented_specs.dfy"
 
 module EETraceDefs {
-    import opened EEASpecTypes
-    import opened EEADistributedSystem
-    import opened EEAInstrumentedSpecs   
+    import opened L1_SpecTypes
+    import opened L1_DistributedSystem
+    import opened L1_InstrumentedSpecs   
 
     type Trace = nat -> DSState
 

@@ -21,28 +21,28 @@ include "../theorems_defs.dfy"
 
 
 // TODO: Rename file and module
-module EEAInstrDSStateInvariantsHeavy
+module L1_InstrDSStateInvariantsHeavy
 {
-    import opened EEASpecTypes
-    import opened EEASpecNetwork
-    import opened EEAAuxiliaryFunctionsAndLemmas
-    import opened EEACommonFunctions
-    import opened EEASpec
+    import opened L1_SpecTypes
+    import opened L1_SpecNetwork
+    import opened L1_AuxiliaryFunctionsAndLemmas
+    import opened L1_CommonFunctions
+    import opened L1_Spec
     import opened HelperLemmasSets
-    import opened EEADistributedSystem
-    import opened EEAInstrumentedSpecs
-    import opened EEAAxioms
-    import opened EEAAuxFunctionsProof
-    import opened EEAAuxBasicInvariantsProof
-    import opened EEANetworkingInvariants
-    import opened EEAInstrNodeStateInvariants
-    import opened EEALemmaQuorum
-    import opened EEAGeneralLemmas
-    import opened EEAInstrDSStateNetworkingCommonInvariants
-    import opened EEAInstrDSStateInvariants
-    import opened EEANetworkingInvariantsLemmas
-    import opened EEANetworkingStepLemmas
-    import opened EEATheoremsDefs
+    import opened L1_DistributedSystem
+    import opened L1_InstrumentedSpecs
+    import opened L1_Axioms
+    import opened L1_AuxFunctionsProof
+    import opened L1_AuxBasicInvariantsProof
+    import opened L1_NetworkingInvariants
+    import opened L1_InstrNodeStateInvariants
+    import opened L1_LemmaQuorum
+    import opened L1_GeneralLemmas
+    import opened L1_InstrDSStateNetworkingCommonInvariants
+    import opened L1_InstrDSStateInvariantsDefs
+    import opened L1_NetworkingInvariantsLemmas
+    import opened L1_NetworkingStepLemmas
+    import opened L1_TheoremsDefs
 
 
     lemma lemmaPBlockchainConsistencyUpToHeightImpliesConsistencyForHonestBlockchainOfThatHeightHelper(

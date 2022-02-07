@@ -7,14 +7,14 @@ include "support_lemmas/trace_general_lemmas.dfy"
 include "theorems_defs.dfy"
 
 
-module EEATheorems {
-    import opened EEASpecTypes
-    import opened EEADistributedSystem
-    import opened EEAAuxFunctionsProof
+module L1_Theorems {
+    import opened L1_SpecTypes
+    import opened L1_DistributedSystem
+    import opened L1_AuxFunctionsProof
     import opened EETraceDefs
-    import opened EETraceProofs
-    import opened EEATraceGeneralLemmas    
-    import opened EEATheoremsDefs
+    import opened L1_TraceInstrumentedLemmas
+    import opened L1_TraceGeneralLemmas    
+    import opened L1_TheoremsDefs
 
 
     predicate consistency(t: Trace)

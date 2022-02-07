@@ -13,22 +13,22 @@ include "basic_invariants.dfy"
 include "instr_node_state_invariants.dfy"
 include "instr_dsstate_networking_common_invariants.dfy"
 
-module EEANetworkingInvariants
+module L1_NetworkingInvariants
 {
-    import opened EEASpecTypes
-    import opened EEASpecNetwork
-    import opened EEAAuxiliaryFunctionsAndLemmas
-    import opened EEACommonFunctions
-    import opened EEASpec
+    import opened L1_SpecTypes
+    import opened L1_SpecNetwork
+    import opened L1_AuxiliaryFunctionsAndLemmas
+    import opened L1_CommonFunctions
+    import opened L1_Spec
     import opened HelperLemmasSets
-    import opened EEADistributedSystem
-    import opened EEAInstrumentedSpecs
-    import opened EEAAxioms
-    import opened EEAAuxFunctionsProof
-    import opened EEAAuxBasicInvariantsProof
-    import opened EEAInstrNodeStateInvariants
-    import opened EEAInstrDSStateNetworkingCommonInvariants
-    import opened EEAGeneralLemmas
+    import opened L1_DistributedSystem
+    import opened L1_InstrumentedSpecs
+    import opened L1_Axioms
+    import opened L1_AuxFunctionsProof
+    import opened L1_AuxBasicInvariantsProof
+    import opened L1_InstrNodeStateInvariants
+    import opened L1_InstrDSStateNetworkingCommonInvariants
+    import opened L1_GeneralLemmas
 
     predicate invMessagesReceivedHaveBeenSent(
         s:InstrDSState,

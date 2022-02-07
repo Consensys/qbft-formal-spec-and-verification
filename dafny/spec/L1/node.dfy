@@ -8,62 +8,11 @@ include "types.dfy"
 include "node_auxiliary_functions.dfy"
 include "lemmas.dfy"
 
-module EEASpec
+module L1_Spec
 {
-    import opened EEASpecTypes
-    import opened EEAAuxiliaryFunctionsAndLemmas
-    import opened EEALemmas
-
-
-    /** =======================================================================
-     * QBFT SPECIFICATION
-     ========================================================================*/   
-    // TODO: Check this one   
-    /**
-     * TO BE FIXED
-     *
-     * This function provides the overall specification of the QBFT protocol.
-     *
-     * @param configuration The system configuration
-     * @param id The QBFT node id.
-     * @param rms Sequence of messages received by node `id` where `rmt[i]` is
-     *            the set of messages received on its `i`-th local clock tick.
-     *
-     * @returns 
-     * 
-     * 
-     * The set, possible infinite, that specifies all the possible set
-     *          of messages that a node `id` is allowed to send and the
-     *          blockchains that a node `id` must have after receiving the
-     *          sequence of messages `rms` when deployed in a QBFT network with
-     *          configuration `c`. Specifically, a QBFT node with identifier
-     *          `id`, that is deployed in a system with configuration `c` and
-     *          that has received the sequence of messages `rms`, is allowed to
-     *          send messages as specified by the set `outQbftMessages` and have
-     *          blockchain `bc` only if the pair (`outQbftMessages`, `bc`) is
-     *          included in the set returned by `QbftSpecification(c, id, rms)`.
-     */
-    function QbftSpecification(
-        configuration: Configuration,
-        id: Address,
-        rms: seq<set<QbftMessage>>):
-        iset<(set<QbftMessageWithRecipient>, Blockchain)>
-    requires |rms| > 0 
-    {
-        iset sm:set<QbftMessageWithRecipient>, blockchain: Blockchain |
-            exists nt: seq<NodeState>, smt: seq<set<QbftMessageWithRecipient>> ::
-                && |nt| == |rms| + 1
-                && |smt| == |rms|
-                && NodeInit(nt[0], configuration, id)
-                && (forall i:nat | 0 <= i < |rms| ::
-                        && validNodeState(nt[i])
-                        && NodeNext(nt[i], rms[i], nt[i+1], smt[i])
-                )
-                && sm == smt[|smt|-1]
-                && blockchain == nt[|nt|-1].blockchain 
-            ::
-                (sm, blockchain)
-    }       
+    import opened L1_SpecTypes
+    import opened L1_AuxiliaryFunctionsAndLemmas
+    import opened L1_Lemmas     
 
     /** =======================================================================
      * QBFT NODE STATE TRANSITION AND MESSAGE TRANSMISSION SPECIFICATION

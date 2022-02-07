@@ -7,16 +7,16 @@ include "../distr_system_spec/distributed_system.dfy"
 include "../../common/sets.dfy"
 include "instrumented_specs.dfy"
 
-module EEAAuxBasicInvariantsProof
+module L1_AuxBasicInvariantsProof
 {
-    import opened EEASpecTypes
-    import opened EEASpecNetwork
-    import opened EEAAuxiliaryFunctionsAndLemmas
-    import opened EEACommonFunctions
-    import opened EEASpec
+    import opened L1_SpecTypes
+    import opened L1_SpecNetwork
+    import opened L1_AuxiliaryFunctionsAndLemmas
+    import opened L1_CommonFunctions
+    import opened L1_Spec
     import opened HelperLemmasSets
-    import opened EEADistributedSystem
-    import opened EEAInstrumentedSpecs  
+    import opened L1_DistributedSystem
+    import opened L1_InstrumentedSpecs  
 
     predicate invNodesIdMatchesMapKey(s:InstrDSState)
     {

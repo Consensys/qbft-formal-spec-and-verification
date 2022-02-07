@@ -13,20 +13,20 @@ include "instr_dsstate_invariants_2.dfy"
 include "aux_functions.dfy"
 include "trace_defs.dfy"
 
-module EEATraceGeneralLemmas {
-    import opened EEASpecTypes
-    import opened EEASpecNetwork
-    import opened EEAAuxiliaryFunctionsAndLemmas
-    import opened EEASpec
-    import opened EEAAdversary
+module L1_TraceGeneralLemmas {
+    import opened L1_SpecTypes
+    import opened L1_SpecNetwork
+    import opened L1_AuxiliaryFunctionsAndLemmas
+    import opened L1_Spec
+    import opened L1_Adversary
     import opened HelperLemmasSets
-    import opened EEADistributedSystem
-    import opened EEAInstrumentedSpecs
-    import opened EEANetworkingInvariants   
-    import opened EEAInstrDSStateInvariants
-    import opened EEARefinementForMutipleStep
-    import opened EEAInstrDSStateInvariantsNew
-    import opened EEAAuxFunctionsProof
+    import opened L1_DistributedSystem
+    import opened L1_InstrumentedSpecs
+    import opened L1_NetworkingInvariants   
+    import opened L1_InstrDSStateInvariantsDefs
+    import opened L1_RefinementForMutipleStep
+    import opened L1_InstrDSStateInvariantsNew
+    import opened L1_AuxFunctionsProof
     import opened EETraceDefs    
 
     lemma lemmaPredicateThatHoldsForAllTracesExtractedFromValidInstrTracesAlsoHoldsForAValidTrace(

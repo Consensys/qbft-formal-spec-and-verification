@@ -1,3 +1,4 @@
+// TODO: Add licensing to IronClad
 module Collections__Maps {
 
 function mapdomain<KT,VT>(m:map<KT,VT>) : set<KT>
@@ -27,7 +28,7 @@ predicate imap2total<K1(!new), K2, V>(m:imap2<K1, K2, V>)
     imaptotal(m) && forall k1 :: imaptotal(m[k1])
 }
 
-predicate imaptotal_(f:imap<int, int>) { imaptotal(f) } // TODO: remove hack when opaque/generic bug is fixed
+predicate imaptotal_(f:imap<int, int>) { imaptotal(f) }
 
 predicate monotonic(f:imap<int, int>)
 {
@@ -45,9 +46,6 @@ predicate behaviorMonotonic<S>(b:imap<int, S>, f:imap<S, int>)
 {
     forall i1, i2 :: i1 <= i2 ==> f[b[i1]] <= f[b[i2]]
 }
-
-// TODO_MODULE: module Collections__Maps2_i {
-// TODO_MODULE: import opened Collections__Maps2_s
 
 lemma Lemma_EqualityConditionForMapsWithSameDomain<S, T>(m1:map<S, T>, m2:map<S, T>)
     requires mapdomain(m1) == mapdomain(m2);

@@ -166,7 +166,7 @@ function MapSetToSet<X(!new), Y>(xs:set<X>, f:X->Y):set<Y>
   ys
 }
 
-function/*TODO:{:opaque}*/ MapSetToSetOver<X, Y>(xs:set<X>, f:X->Y):set<Y>
+function MapSetToSetOver<X, Y>(xs:set<X>, f:X->Y):set<Y>
   reads f.reads;
   requires forall x :: x in xs ==> f.requires(x);
   requires InjectiveOver(xs, set x | x in xs :: f(x), f);

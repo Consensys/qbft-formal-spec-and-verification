@@ -5,14 +5,14 @@ include "../../../spec/L1/node.dfy"
 include "../distr_system_spec/distributed_system.dfy"
 include "../../common/sets.dfy"
 
-module EEAAxioms
+module L1_Axioms
 {
-    import opened EEASpecTypes
-    import opened EEASpecNetwork
-    import opened EEAAuxiliaryFunctionsAndLemmas
-    import opened EEASpec
+    import opened L1_SpecTypes
+    import opened L1_SpecNetwork
+    import opened L1_AuxiliaryFunctionsAndLemmas
+    import opened L1_Spec
     import opened HelperLemmasSets
-    import opened EEADistributedSystem
+    import opened L1_DistributedSystem
 
     lemma {:axiom} axiomRawValidatorsNeverChange()
     ensures forall b1, b2 :: validatorsOnRawBlockchain(b1) == validatorsOnRawBlockchain(b2)                           

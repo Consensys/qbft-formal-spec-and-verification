@@ -2,10 +2,10 @@ include "../../spec/L1/types.dfy"
 include "distr_system_spec/common_functions.dfy"
 
 
-module EEATheoremsDefs {
+module L1_TheoremsDefs {
 
-    import opened EEASpecTypes
-    import opened EEAAuxiliaryFunctionsAndLemmas
+    import opened L1_SpecTypes
+    import opened L1_AuxiliaryFunctionsAndLemmas
 
     predicate consistentBlockchains(bc1:Blockchain, bc2:Blockchain)
     {

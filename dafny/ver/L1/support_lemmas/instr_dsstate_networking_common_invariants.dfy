@@ -13,19 +13,19 @@ include "instr_node_state_invariants.dfy"
 // include "quorum.dfy"
 // include "general_lemmas.dfy"
 
-module EEAInstrDSStateNetworkingCommonInvariants
+module L1_InstrDSStateNetworkingCommonInvariants
 {
-    import opened EEASpecTypes
-    import opened EEASpecNetwork
-    import opened EEAAuxiliaryFunctionsAndLemmas
-    import opened EEASpec
+    import opened L1_SpecTypes
+    import opened L1_SpecNetwork
+    import opened L1_AuxiliaryFunctionsAndLemmas
+    import opened L1_Spec
     import opened HelperLemmasSets
-    import opened EEADistributedSystem
-    import opened EEAInstrumentedSpecs
-    import opened EEAAxioms
-    import opened EEAAuxFunctionsProof
-    import opened EEAAuxBasicInvariantsProof
-    import opened EEAInstrNodeStateInvariants
+    import opened L1_DistributedSystem
+    import opened L1_InstrumentedSpecs
+    import opened L1_Axioms
+    import opened L1_AuxFunctionsProof
+    import opened L1_AuxBasicInvariantsProof
+    import opened L1_InstrNodeStateInvariants
 
     predicate validInstrDSStateEx(s:InstrDSState)
     {

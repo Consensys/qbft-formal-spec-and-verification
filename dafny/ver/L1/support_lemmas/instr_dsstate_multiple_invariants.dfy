@@ -20,27 +20,27 @@ include "instr_dsstate_invariants_2.dfy"
 include "../theorems_defs.dfy"
 
 
-module EEARefinementForMutipleStep {
-    import opened EEASpecTypes
-    import opened EEASpecNetwork
-    import opened EEAAuxiliaryFunctionsAndLemmas
-    import opened EEACommonFunctions
-    import opened EEASpec
-    import opened EEAAdversary
+module L1_RefinementForMutipleStep {
+    import opened L1_SpecTypes
+    import opened L1_SpecNetwork
+    import opened L1_AuxiliaryFunctionsAndLemmas
+    import opened L1_CommonFunctions
+    import opened L1_Spec
+    import opened L1_Adversary
     import opened HelperLemmasSets
-    import opened EEADistributedSystem
-    import opened EEAInstrumentedSpecs
-    import opened EEAAxioms
-    import opened EEAAuxFunctionsProof
-    import opened EEAAuxBasicInvariantsProof
-    import opened EEANetworkingInvariants
-    import opened EEAInstrNodeStateInvariants
-    import opened EEALemmaQuorum
-    import opened EEAGeneralLemmas
-    import opened EEAInstrDSStateNetworkingCommonInvariants
-    import opened EEAInstrDSStateInvariants
-    import opened EEAInstrDSStateInvariantsNew 
-    import opened EEATheoremsDefs
+    import opened L1_DistributedSystem
+    import opened L1_InstrumentedSpecs
+    import opened L1_Axioms
+    import opened L1_AuxFunctionsProof
+    import opened L1_AuxBasicInvariantsProof
+    import opened L1_NetworkingInvariants
+    import opened L1_InstrNodeStateInvariants
+    import opened L1_LemmaQuorum
+    import opened L1_GeneralLemmas
+    import opened L1_InstrDSStateNetworkingCommonInvariants
+    import opened L1_InstrDSStateInvariantsDefs
+    import opened L1_InstrDSStateInvariantsNew 
+    import opened L1_TheoremsDefs
 
 
     lemma lemmaGetStateSuchThatInductiveInvariantsForConsistencyAreSatisfiedAndItIsInstrDSStateMultisetSetMessagesSentEquivalentToDestinationInstrDSStateOfHonestMultipleStepHelper<T(!new)>(

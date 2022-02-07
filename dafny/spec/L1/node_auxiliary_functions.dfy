@@ -7,9 +7,9 @@
 include "types.dfy"
 include "lemmas.dfy"
 
-module EEAAuxiliaryFunctionsAndLemmas
+module L1_AuxiliaryFunctionsAndLemmas
 {
-    import opened EEASpecTypes
+    import opened L1_SpecTypes
 
     /** =======================================================================
      * CRYPTOGRAPHIC PRIMITIVES
