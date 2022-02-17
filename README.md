@@ -1,4 +1,4 @@
-[![L1-Dafny-Safety-Verification](https://github.com/ConsenSys/qbft-formal-spec-and-verification/actions/workflows/L1-Dafny-Safety-Verification.yml/badge.svg)](https://github.com/ConsenSys/qbft-formal-spec-and-verification/actions/workflows/L1-Dafny-Safety-Verification.yml)
+[![Dafny-L1-Safety-Verification](https://github.com/ConsenSys/qbft-formal-spec-and-verification/actions/workflows/Dafny-L1-Safety-Verification.yml/badge.svg)](https://github.com/ConsenSys/qbft-formal-spec-and-verification/actions/workflows/Dafny-L1-Safety-Verification.yml)
 
 # QBFT Formal Specification and Verification
 
