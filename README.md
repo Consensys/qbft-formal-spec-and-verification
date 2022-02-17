@@ -1,3 +1,5 @@
+![](https://github.com/ConsenSys/qbft-formal-spec-and-verification/actions/workflows/ci.yml/badge.svg)
+
 # QBFT Formal Specification and Verification
 
 This repo contains the formal specification and verification of correctness of the QBFT consensus protocol which is based on the protocol described in the paper ["The Istanbul BFT Consensus Algorithm"](https://arxiv.org/abs/2002.03613) by Henrique Moniz.
