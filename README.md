@@ -1,3 +1,5 @@
+[![Dafny-L1-Safety-Verification](https://github.com/ConsenSys/qbft-formal-spec-and-verification/actions/workflows/Dafny-L1-Safety-Verification.yml/badge.svg)](https://github.com/ConsenSys/qbft-formal-spec-and-verification/actions/workflows/Dafny-L1-Safety-Verification.yml)
+
 # QBFT Formal Specification and Verification
 
 This repo contains the formal specification and verification of correctness of the QBFT consensus protocol which is based on the protocol described in the paper ["The Istanbul BFT Consensus Algorithm"](https://arxiv.org/abs/2002.03613) by Henrique Moniz.
