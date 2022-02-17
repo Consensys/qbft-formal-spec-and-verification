@@ -634,7 +634,7 @@ module L1_AuxiliaryFunctionsAndLemmas
             )
         )
     }     
-
+a
     /**
      * @returns `true` if and only if a QBFT node with state `current` has
      *          received a valid Proposal Justification.
