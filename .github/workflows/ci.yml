@@ -27,6 +27,7 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: Execute verification of safety of L1 Dafny QBFT Specs
+        shell: 'script -q -e -c "bash {0}"'
         run: sh dafny/ver/L1/verify.sh
 
       # Runs a set of commands using the runners shell
