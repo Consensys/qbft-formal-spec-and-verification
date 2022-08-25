@@ -157,6 +157,19 @@ module L1_AuxiliaryFunctionsAndLemmas
     /**
      * @returns The union of all sets included in `sets`.
      */
+    function setUnion<T(!new)>(sets:set<set<T>>):set<T>
+    ensures forall e :: ((exists s | s in sets :: e in s) <==> e in setUnion(sets))
+    {
+        if sets == {} then
+            {}
+        else
+            var s :| s in sets;
+            s + setUnion(sets - {s})
+    } 
+
+    /**
+     * @returns The union of all sets included in `sets`.
+     */
     function setUnionOnSeq<T>(sets:seq<set<T>>):set<T>
     {
         if sets == [] then
@@ -175,6 +188,18 @@ module L1_AuxiliaryFunctionsAndLemmas
         else
             2 * powerOf2(exp-1)
     }
+
+    /**
+     * Function wrapping the Dafny set inclusion operator `<=` to make the spec more 
+     * readable by people who are not much familiar with Dafny who may not be aware of
+     * the semantic of the `<=` operator when applied to sets.
+     *
+     * @returns true iff `subSet` is a non-strict subset of `setIncludingTheSubset`
+     */
+    predicate isNonStrictSubSetOf<T>(subSet: set<T>, setIncludingTheSubset: set<T>)
+    {
+        subSet <= setIncludingTheSubset
+    }     
 
     /** =======================================================================
      * QBFT GENERAL FUNCTIONS
@@ -361,7 +386,25 @@ module L1_AuxiliaryFunctionsAndLemmas
         set m | 
             && m in current.messagesReceived
             && m.Prepare?            
-    }      
+    }   
+
+    function extractSignedPreparesEx(messages:set<QbftMessage>): set<SignedPrepare>
+    {
+        (set m | && m in messages
+                && m.Prepare?
+            ::
+                m.preparePayload)
+        +
+        setUnion(
+            set m | && m in messages
+                    && (
+                        || m.Proposal?
+                        || m.RoundChange?
+                    )
+                ::
+                    m.roundChangeJustification
+        )      
+    }          
 
     /**
      * @returns The set of signed Prepare payloads included in the set of
@@ -544,6 +587,11 @@ module L1_AuxiliaryFunctionsAndLemmas
                     && block.header.height == height
                     && |prepares| >= quorum(|validators|)
                     && exists rcm | rcm in roundChanges ::
+                        // TODO: Liveness issue. No, because
+                        // hasReceivedProposalJustificationForLeadingRound
+                        // "iterates" over all possible quorums of Round Change
+                        // message and we just need one quorum of round changes
+                        // to respect satisfy this predicate.
                         && isHighestPrepared(rcm,roundChanges)
                         && var proposedBlockWithOldRound := 
                                 replaceRoundInBlock(
@@ -611,8 +659,9 @@ module L1_AuxiliaryFunctionsAndLemmas
         current:NodeState)
     requires validNodeState(current)
     {
-        && roundChanges <= receivedRoundChanges(current)
-        && prepares <= receivedPrepares(current)
+        && isNonStrictSubSetOf(roundChanges, receivedRoundChanges(current))
+        && (forall m | m in prepares :: m.Prepare?)
+        && isNonStrictSubSetOf(extractSignedPrepares(prepares), extractSignedPreparesEx(current.messagesReceived))
         && isProposalJustification(
             extractSignedRoundChanges(roundChanges),
             extractSignedPrepares(prepares),
@@ -637,9 +686,10 @@ module L1_AuxiliaryFunctionsAndLemmas
 
     /**
      * @returns `true` if and only if a QBFT node with state `current` has
-     *          received a valid Proposal Justification.
+     *          received a valid Proposal Justification for a round where the QBFT node 
+     *          is the leader.
      */
-    predicate hasReceivedProposalJustification(current: NodeState)
+    predicate hasReceivedProposalJustificationForLeadingRound(current: NodeState)
     requires validNodeState(current)
     {
         exists  
@@ -648,7 +698,8 @@ module L1_AuxiliaryFunctionsAndLemmas
             newRound: nat,
             block: Block
         ::
-            isReceivedProposalJustification(roundChanges, prepares, newRound, block, current)
+            && isReceivedProposalJustification(roundChanges, prepares, newRound, block, current)
+            && proposer(newRound, current.blockchain) == current.id
     }  
       
     /**
@@ -663,13 +714,17 @@ module L1_AuxiliaryFunctionsAndLemmas
         if !optionIsPresent(current.lastPreparedBlock) then
             {}
         else
-            var QofP :| 
-                && QofP <= validPreparesForHeightRoundAndDigest(
-                                    current.messagesReceived,
-                                    |current.blockchain|,
-                                    optionGet(current.lastPreparedRound),
-                                    digest(optionGet(current.lastPreparedBlock)),
-                                    validators(current.blockchain))
+            var QofP: set<QbftMessage> :| 
+                && isNonStrictSubSetOf(
+                    QofP,
+                    validPreparesForHeightRoundAndDigest(
+                        current.messagesReceived,
+                        |current.blockchain|,
+                        optionGet(current.lastPreparedRound),
+                        digest(optionGet(current.lastPreparedBlock)),
+                        validators(current.blockchain)
+                    )
+                )
                 && |QofP| >= quorum(|validators(current.blockchain)|);
             
             set m | m in QofP :: m.preparePayload
@@ -843,12 +898,16 @@ module L1_AuxiliaryFunctionsAndLemmas
         && (!optionIsPresent(nodeState.lastPreparedRound) <==> !optionIsPresent(nodeState.lastPreparedBlock))
         && (optionIsPresent(nodeState.lastPreparedRound) ==>
                 exists QofP ::
-                    && QofP <= validPreparesForHeightRoundAndDigest(
-                                    nodeState.messagesReceived,
-                                    |nodeState.blockchain|,
-                                    optionGet(nodeState.lastPreparedRound),
-                                    digest(optionGet(nodeState.lastPreparedBlock)),
-                                    validators(nodeState.blockchain))
+                    && isNonStrictSubSetOf(
+                            QofP,
+                            validPreparesForHeightRoundAndDigest(
+                                nodeState.messagesReceived,
+                                |nodeState.blockchain|,
+                                optionGet(nodeState.lastPreparedRound),
+                                digest(optionGet(nodeState.lastPreparedBlock)),
+                                validators(nodeState.blockchain)
+                        )
+                    )
                     && |QofP| >= quorum(|validators(nodeState.blockchain)|) 
             )   
         && StateBlockchainInvariant(nodeState.blockchain)       

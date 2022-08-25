@@ -6,19 +6,6 @@ module L1_CommonFunctions{
     import opened L1_SpecTypes
     import opened L1_AuxiliaryFunctionsAndLemmas
 
-    /**
-     * @returns The union of all sets included in `sets`.
-     */
-    function setUnion<T(!new)>(sets:set<set<T>>):set<T>
-    ensures forall e :: ((exists s | s in sets :: e in s) <==> e in setUnion(sets))
-    {
-        if sets == {} then
-            {}
-        else
-            var s :| s in sets;
-            s + setUnion(sets - {s})
-    } 
-
     function setToSeq<T(!new)>(s:set<T>):seq<T>
     {
         if s == {} then

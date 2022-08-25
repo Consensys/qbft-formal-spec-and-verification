@@ -14,6 +14,63 @@ module L1_Spec
     import opened L1_AuxiliaryFunctionsAndLemmas
     import opened L1_Lemmas     
 
+
+    /** =======================================================================
+     * QBFT SPECIFICATION
+     ========================================================================*/      
+    /**
+     *
+     * This function provides the overall specification of the QBFT protocol.
+     *
+     * @param configuration The system configuration
+     * @param id The QBFT node id.
+     * @param qbftNodeBehaviour QBFT Behaviour
+     *
+     * @returns `true` if and only if `qbftNodeBehaviour` is a valid QBFT behaviour
+     *          for a QBFT node with id `id` deployed in a system with configuration
+     *          `configuration.
+     * 
+     */   
+    predicate IsValidQbftBehaviour(
+        configuration: Configuration,
+        id: Address,
+        qbftNodeBehaviour: QbftNodeBehaviour
+    )
+    {
+        exists nt: iseq<NodeState> ::
+            && NodeInit(nt[0], configuration, id)
+            && qbftNodeBehaviour.initialBlockchain == nt[0].blockchain
+            && (forall i:nat ::
+                    IsValidQbftBehaviourStep(qbftNodeBehaviour, nt ,i)
+            )
+    }    
+
+    /**
+     * This function defines the conditions of validity for a single QBFT
+     * behaviour step
+     *
+     * @param qbftNodeBehaviour QBFT Behaviour including the step for which to
+     *                          verify validity.
+     * @param nt Infinite sequence of QBFT states associated with the behaviour
+     *           `qbftNodeBehaviour`.
+     * @param i Index of the step for which to verify validity
+     *
+     * @returns `true` if and only if the `i`-th step in `qbftNodeBehaviour`
+     *          corresponds to a valid transition between state `nt[i]` and
+     *          state `nt[i+1]`.
+     */
+    predicate IsValidQbftBehaviourStep(
+        qbftNodeBehaviour: QbftNodeBehaviour,
+        nt: iseq<NodeState>,
+        i: nat
+    )
+    {
+        var step := qbftNodeBehaviour.steps[i];
+        && validNodeState(nt[i])
+        && NodeNext(nt[i], step.messagesReceived, nt[i+1], step.messagesToSend)
+        && step.newBlockchain == nt[i+1].blockchain        
+    }    
+
     /** =======================================================================
      * QBFT NODE STATE TRANSITION AND MESSAGE TRANSMISSION SPECIFICATION
      ========================================================================*/    
@@ -34,6 +91,7 @@ module L1_Spec
     predicate NodeInit(state:NodeState, c:Configuration, id:Address)
     {
         && state.blockchain == [c.genesisBlock]
+        // TODO: Move following check to the isValidConfiguration
         && |validators([c.genesisBlock])| > 0
         && state.round == 0
         && state.localTime == 0
@@ -277,12 +335,16 @@ module L1_Spec
         if  && exists QofP:: 
                     && optionIsPresent(current.proposalAcceptedForCurrentRound)
 
-                    && QofP <= validPreparesForHeightRoundAndDigest(
-                                current.messagesReceived,
-                                |current.blockchain|,
-                                current.round,
-                                digest(optionGet(current.proposalAcceptedForCurrentRound).proposedBlock),
-                                validators(current.blockchain))
+                    &&  isNonStrictSubSetOf(
+                        QofP,
+                        validPreparesForHeightRoundAndDigest(
+                            current.messagesReceived,
+                            |current.blockchain|,
+                            current.round,
+                            digest(optionGet(current.proposalAcceptedForCurrentRound).proposedBlock),
+                            validators(current.blockchain)
+                        )
+                    )
                     && |QofP| >= quorum(|validators(current.blockchain)|) 
 
             && !exists m :: && m in current.messagesReceived
@@ -348,7 +410,7 @@ module L1_Spec
                     validators(current.blockchain));
 
             if  exists QofC:: 
-                    && QofC <= allValidCommitsForCurrentHeightAndRound
+                    && isNonStrictSubSetOf(QofC, allValidCommitsForCurrentHeightAndRound)
                     && |QofC| >= quorum(|validators(current.blockchain)|) 
             then  
                 // The following statement is required only to let the varifier
@@ -356,7 +418,7 @@ module L1_Spec
                 lemmaIfSubSetOfGreaterSizeExistsThenSmallSubsetExists(allValidCommitsForCurrentHeightAndRound, quorum(|validators(current.blockchain)|));
 
                 var QofC:|
-                    && QofC <= allValidCommitsForCurrentHeightAndRound
+                    && isNonStrictSubSetOf(QofC, allValidCommitsForCurrentHeightAndRound)
                     && |QofC| == quorum(|validators(current.blockchain)|);
 
                 var proposedBlock:Block := current.proposalAcceptedForCurrentRound.value.proposedBlock;
@@ -453,14 +515,15 @@ module L1_Spec
         outQbftMessages: set<QbftMessageWithRecipient>)
     requires validNodeState(current)
     {
-        if  hasReceivedProposalJustification(current)
+        if  hasReceivedProposalJustificationForLeadingRound(current)
         then
             var roundChanges,
                 prepares,
                 newRound:nat,
                 block
                 :|
-                    isReceivedProposalJustification(roundChanges, prepares, newRound, block, current);
+                    && isReceivedProposalJustification(roundChanges, prepares, newRound, block, current)
+                    && proposer(newRound, current.blockchain) == current.id;
 
             var proposal :=
                 Proposal(
@@ -482,6 +545,7 @@ module L1_Spec
 
             && next ==  current.(
                             round := newRound,
+                            // TODO: Is followind setting Ok?
                             proposalAcceptedForCurrentRound := Optional.None,
                             timeLastRoundStart :=
                                 if newRound > current.round then
@@ -493,7 +557,7 @@ module L1_Spec
 
         else if 
             exists Frc:set<SignedRoundChange> ::
-                && Frc <= receivedSignedRoundChangesForCurrentHeightAndFutureRounds(current)
+                && isNonStrictSubSetOf(Frc, receivedSignedRoundChangesForCurrentHeightAndFutureRounds(current))
                 && |getSetOfRoundChangeSenders(Frc)| >= f(|validators(current.blockchain)|) + 1
         then
             // The following lemma is not really part of the specification.
@@ -503,7 +567,7 @@ module L1_Spec
                 f(|validators(current.blockchain)|) + 1 );                
             
             var Frc:set<SignedRoundChange> :| 
-                && Frc <= receivedSignedRoundChangesForCurrentHeightAndFutureRounds(current)
+                && isNonStrictSubSetOf(Frc, receivedSignedRoundChangesForCurrentHeightAndFutureRounds(current))
                 && |getSetOfRoundChangeSenders(Frc)| == f(|validators(current.blockchain)|) + 1;
 
             var newRound := minSet(set rcm | rcm in Frc :: rcm.unsignedPayload.round);

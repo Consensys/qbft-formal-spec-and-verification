@@ -481,24 +481,6 @@ module L1_AuxFunctionsProof
         set m | m in s && recoverSignedHashAuthor(h, m) == a
     }    
 
-    function extractSignedPreparesEx(messages:set<QbftMessage>): set<SignedPrepare>
-    {
-        (set m | && m in messages
-                && m.Prepare?
-            ::
-                m.preparePayload)
-        +
-        setUnion(
-            set m | && m in messages
-                    && (
-                        || m.Proposal?
-                        || m.RoundChange?
-                    )
-                ::
-                    m.roundChangeJustification
-        )      
-    }        
-
     function getSetOfSignedPreparePayloads(s:set<SignedPrepare>): set<SignedPayload>               
     {
         set m | 

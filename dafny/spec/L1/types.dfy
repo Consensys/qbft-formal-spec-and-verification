@@ -190,6 +190,40 @@ module L1_SpecTypes
     /**
      * This type is used to represent a single value that may be not present.
      */
-    datatype Optional<T> = Optional(value:T) | None          
+    datatype Optional<T> = Optional(value:T) | None     
 
+    type iseq<T> = x: imap<nat, T> | forall i: nat :: i in x.Keys witness *     
+
+    /** =======================================================================
+     * BEHAVIOUR TYPES
+     *
+     * This section includes the declaration of the types that are used to 
+     * describe QBFT node behaviours.
+     *
+     ========================================================================*/    
+
+    /**
+     * This type represents a step of a QBFT node behaviour.
+     * 
+     * On a step, a node receives the set of messages `messageReceived` and in 
+     * response it sends the set of messages `messagesToSend` and set its
+     * blockchain to `newBlockchain`.
+     */
+    datatype QbftSpecificationStep = QbftSpecificationStep(
+        messagesReceived: set<QbftMessage>,
+        newBlockchain: Blockchain,
+        messagesToSend: set<QbftMessageWithRecipient>
+    )
+
+    /**
+     * This type represents a QBFT node behaviour.
+     * 
+     * `initialBlockchain` is the blockchain exposed by the QBFT node
+     * at the very beginning and `steps` is the infinite sequence of steps composing
+     * the behaviour of the QBFT node.
+     */
+    datatype QbftNodeBehaviour = QbftNodeBehaviour(
+        initialBlockchain: Blockchain,
+        steps: iseq<QbftSpecificationStep>
+    )     
 }
