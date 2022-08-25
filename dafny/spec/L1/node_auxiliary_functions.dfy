@@ -633,13 +633,10 @@ module L1_AuxiliaryFunctionsAndLemmas
         // NOTE: This check is not required by the QBFT paper as the message structure is a bit different
         && digest(m.proposedBlock) == m.proposalPayload.unsignedPayload.digest
         && (
+            || m.proposalPayload.unsignedPayload.round > current.round
             || (
                 && !optionIsPresent(current.proposalAcceptedForCurrentRound)
                 && m.proposalPayload.unsignedPayload.round == current.round
-            )
-            || (
-                && optionIsPresent(current.proposalAcceptedForCurrentRound)
-                && m.proposalPayload.unsignedPayload.round > current.round
             )
         )
     }    
@@ -672,16 +669,6 @@ module L1_AuxiliaryFunctionsAndLemmas
             b => && b == getNewBlock(current, newRound),
             proposer(newRound,current.blockchain),
             validators(current.blockchain))
-        && (
-            || (
-                && !optionIsPresent(current.proposalAcceptedForCurrentRound)
-                && newRound == current.round
-            )
-            || (
-                && optionIsPresent(current.proposalAcceptedForCurrentRound)
-                && newRound > current.round
-            )
-        )
     }     
 
     /**
@@ -698,9 +685,36 @@ module L1_AuxiliaryFunctionsAndLemmas
             newRound: nat,
             block: Block
         ::
-            && isReceivedProposalJustification(roundChanges, prepares, newRound, block, current)
-            && proposer(newRound, current.blockchain) == current.id
+            && isProposalJustificationForLeadingRound(roundChanges, prepares, newRound, block, current)          
     }  
+
+    /**
+     * @returns `true` if and only if a QBFT node with state `current` has
+     *          received a valid Proposal Justification for `newRound` where the
+     *          QBFT node is the leader in `newRound` and, either `newRound` is
+     *          strictly higher than the current round or it is equal to the
+     *          current round and no proposal has been accepted for the current
+     *          round 
+     */
+    predicate isProposalJustificationForLeadingRound(
+        roundChanges: set<QbftMessage>,
+        prepares: set<QbftMessage>,
+        newRound: nat,
+        block: Block,
+        current: NodeState     
+    )
+    requires validNodeState(current)
+    {
+        && isReceivedProposalJustification(roundChanges, prepares, newRound, block, current)
+        && proposer(newRound, current.blockchain) == current.id
+        && (
+            || newRound > current.round
+            || (
+                && !optionIsPresent(current.proposalAcceptedForCurrentRound)
+                && newRound == current.round
+            )
+        )               
+    }      
       
     /**
      * @returns The RoundChange Justification that a QBFT node with state

@@ -522,8 +522,7 @@ module L1_Spec
                 newRound:nat,
                 block
                 :|
-                    && isReceivedProposalJustification(roundChanges, prepares, newRound, block, current)
-                    && proposer(newRound, current.blockchain) == current.id;
+                    isProposalJustificationForLeadingRound(roundChanges, prepares, newRound, block, current);
 
             var proposal :=
                 Proposal(
