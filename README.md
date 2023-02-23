@@ -17,3 +17,6 @@ This repo contains the formal specification and verification of correctness of t
 ## How to verify the Dafny spec
 - `cd` to `dafny/ver/L1`
 - execute `./verify.sh`
+
+## Presentations
+[![Ethereum Engineering Meetup Talk](https://img.youtube.com/vi/qcK7TxHQAxI/0.jpg)](https://www.youtube.com/watch?v=qcK7TxHQAxI)
